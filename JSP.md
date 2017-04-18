@@ -17,7 +17,9 @@
 - 每个jsp页面在第一次被访问的时候，jsp引擎将它翻译为一个Servlet源程序，接着再把这个Servlet源程序编译成一个class文件，然后再由WEB容器
 像调用普通的servlet程序那样装载和解释执行这个由jsp程序产生的Servlet程序
 - jsp规范中也没有规定jsp中的脚本程序必须使用Java程序来编写，jsp中的脚本程序代码可以采用Java语言之外的其他脚本语言进行编写，但是jsp文件最后一定要生成Servlet程序进行执行
-- 可以在WEB程序正式发布之前，将其中所有的jsp页面余弦编译成servlet程序
+- 可以在WEB程序正式发布之前，将其中所有的jsp页面先编译成servlet程序
+- 使用eclipse开发时，由jsp生成的Java类所放置的位置为：  
+  - （workspace）：.metadata\.plugins\org.eclipse.wst.server.core\tmp2\work\Catalina\localhost\iim_proj\\org\apache\jsp\
 
 ***
 
