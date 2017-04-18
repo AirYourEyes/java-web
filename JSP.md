@@ -43,6 +43,24 @@
 
 ***
 
+### JSP指令
+- 概述：jsp指令是为了jsp引擎而设计的，它们并不直接产生任何可见的输出，而只是告诉引擎如何处理jsp页面的其余部分
+- 格式:
+  - ` <%@ 指令 属性值="值" %> `
+  - 注意：属性名部分是大小写敏感的,jsp 2.0中定义了page、include、taglib三种指令
+- 如果要在一个jsp页面中设置同一条指令的多个属性，可以使用多条指令语句单独设置每个属性，也可以使用同一条语句设置该指令的多个属性
+  - 例如:  
+    - 第一种方式：  
+    ```
+      <%@ page contentType="text/html;charset=gb2312"%>
+      <%@ page import="java.util.Date" %>
+    ```
+    - 第二种方式：
+     ``` 
+      <%@ page contentType="text/html;charset=gb2312" import="java.util.Date" %>
+    ```
+***
+
 ### 请求与重定向
 
 - 本质区别：请求的转发只发出了一次请求，而重定向则发出了两次请求
