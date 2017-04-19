@@ -59,6 +59,21 @@
      ``` 
       <%@ page contentType="text/html;charset=gb2312" import="java.util.Date" %>
     ```
+#### page指令
+- 用于定义jsp页面的各种属性
+- 可以防止在jsp页面中的任何地方，一般建议放置在页面的开头
+- 不管page指令放置在页面的任何地方，其作用的范围都是整个jsp页面
+- 支持的属性与属性值 
+  - language="java" 指定当前jsp支持编写的语言，实际上并没有什么作用，java是唯一的值
+  - extends="package.class" jsp翻译后的类继承的类，几乎没有什么作用
+  - import="package.class | package.* ..." 导入的java类
+  - session="true|false" 指定当前的页面中是否可以使用隐藏对象session，仅当true的时候可以使用session隐藏对象，也就是使用当前页面是否一定要产生HttpSession对象
+  - errorPage="relative_utl" 指定要是当前页面出错的时候要跳转到的页面
+  - isErrorPage="true|fasle" 表示当前页面是否是出错处理页面，当为true的时候可以使用exception对象，不建议直接使用，因此可以将其放置在WEB-INF文件夹中，WEB-INFO文件中的文件不可以直接通过URL地址访问，但是可以通过请求转发的机制实现访问
+  - contentType="mineTyep[;charset=characterSet] | text/html;charset="utf-8" 当前jsp页面响应给用户的类型（可以是html可以是微软的word），编译成java类的时候，实际上是调用了response.setContentType("text//html; charset=UTF-8");其中charset表示的是响应页面所使用的的编码
+  - pageEncoding="characterSet|ISO8859-1" 指定当前jsp页面所使用的的编码的格式，通常与contentType中的charset的取值相同
+  - isELIgnored="true|false" 表示是当前页面是否可以使用EL表达式，通常取值为false
+
 ***
 
 ### 请求与重定向
