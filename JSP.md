@@ -85,15 +85,53 @@
 - action元素采用XML元素的语法格式，即每个action元素在jsp页面中都以XML标签的形式出现
 - jsp规范中定义了一些标准的action元素，这些元素的标签名都是以jsp为前缀，并且全部采用小写，例如，<jsp:include>,<jsp:forward>等等 
 - <jsp:include>标签
-  - 用于把另外一个资源的输出内容插入进当前的jsp页面的输出内容当中，是一种动态引入的方法
-  - 使用这种方式跟前面的include指令的最大区别是：include指令生成的是一个servlet类，而jsp标签方式生成的有两个servlet类
+  - 用于把另外一个资源的输出内容插入进当前的jsp页面的输出内容当中，是一种动态引入的方法
+  - 使用这种方式跟前面的include指令的最大区别是：include指令生成的是一个servlet类，而jsp标签方式生成的有两个servlet类
 - <jsp:forward>标签
-  - 请求转发，跟使用request的getRequestDispatcher(String path)的方式差不多
-  - 它们之间有一个区别就是，使用jsp标签可以使用<jsp:param>子标签向目标页面传递参数值，在目标页面中可以使用getParameter(String paramName）方法获取参数值
+  - 请求转发，跟使用request的getRequestDispatcher(String path)的方式差不多
+  - 它们之间有一个区别就是，使用jsp标签可以使用<jsp:param>子标签向目标页面传递参数值，在目标页面中可以使用getParameter(String paramName）方法获取参数值
   - 以下的代码是等价的  
     ```<jsp:forward page="/b.jsp"></jsp:forward> ```  
-    ```<% request.getRequestDispatcher("/b.jsp");%>```
-    
+    ```<% request.getRequestDispatcher("/b.jsp").forward(request, response); %>```
+    
+***
+## 中文乱码问题
+- 要在当前的jsp页面中出现中文，且发给用户的响应页面可以正常显示中文，应该满足以下的条件
+  - 出现page指令中的charset指定的编码与pageEncoding指定的编码一致，且是支持中文显示的编码，一般推荐使用UTF-8
+  - 浏览器中查看页面的编码与page指令中指定的编码一致
+  - page指令：
+  ``` <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> ```
+  - 如果使用eclipse开发，一般默认page中的编码为ISO-8859-1,可以通过以下的方法使得新建的jsp页面中的page指令的编码都是UTF-8,首先找到Window，在点击Preference，进行以下图片所显示的操作
+    ![jsp-encoding](/images/jsp-encoding.png)
+- 若要获取的参数中包含中文，采用以下的方法
+  - 若请求使用了post方法：在reques.getParameter(String name)方法之前调用request.setCharacterEncoding(String characterEncodingname)方法，要注意的是顺序不能颠倒，代码如下所示：
+  ```
+    <% request.setCharacterEncoding("UTF-8"); %>
+	  <%= request.getParameter("username") %>
+  ```
+  - 若请求使用的是get方法，若直接使用上面的方法还是会出现乱码，此时有两种方法来解决问题，推荐使用第二种
+    - 第一种：使用String的构造方法
+    ``` 
+      public String(byte[] bytes,
+      String charsetName)
+       throws UnsupportedEncodingException
+    ```
+    例如：
+    ``` 
+      <%= new String(request.getParameter("username").getBytes("ISO-8859-1"), "UTF-8") %>
+    ```
+    - 第二种：通过设置tomcat服务器
+      - 具体步骤：
+        1. 找到tomcat的配置文件：server.xml（\apache-tomcat-6.0.51\conf\server.xml）
+        2. 在该配置文件中找到`<Connector port="8090" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443" />`，注意不要找错，在后面添加useBodyEncodingForURI="true"，配置的结果如下图所示：  
+      ![server_xml_conf](images/server_xml_conf.png)
+        3. 如果使用的是eclipse，需对Project Explorer中的Server项目（这是对tomcat服务器的一个映射）中的配置文件server.xml文件进行跟上面一样的修改，然后重新启动
+        4. 接下来获取参数的步骤跟处理post请求时一样的，代码如下:
+        ```
+           <% request.setCharacterEncoding("UTF-8"); %>
+	         <%= request.getParameter("username") %>
+        ```
+
 ***
 
 ### 请求与重定向
