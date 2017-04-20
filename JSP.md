@@ -72,8 +72,28 @@
   - isErrorPage="true|fasle" 表示当前页面是否是出错处理页面，当为true的时候可以使用exception对象，不建议直接使用，因此可以将其放置在WEB-INF文件夹中，WEB-INFO文件中的文件不可以直接通过URL地址访问，但是可以通过请求转发的机制实现访问
   - contentType="mineTyep[;charset=characterSet] | text/html;charset="utf-8" 当前jsp页面响应给用户的类型（可以是html可以是微软的word），编译成java类的时候，实际上是调用了response.setContentType("text//html; charset=UTF-8");其中charset表示的是响应页面所使用的的编码
   - pageEncoding="characterSet|ISO8859-1" 指定当前jsp页面所使用的的编码的格式，通常与contentType中的charset的取值相同
-  - isELIgnored="true|false" 表示是当前页面是否可以使用EL表达式，通常取值为false
+  - isELIgnored="true|false" 表示是当前页面是否可以使用EL表达式，通常取值为false
 
+#### include指令
+- 通知jsp引擎在翻译当前jsp页面时将其他文件中的内容合并进当前jsp页面转换的Servlet中，属于静态导入
+- file属性值必须是相对路径
+
+***
+
+### JSP标签
+- jsp中提供一种叫做action的元素，在jsp页面中使用action元素可以完成各种通用的jsp页面功能
+- action元素采用XML元素的语法格式，即每个action元素在jsp页面中都以XML标签的形式出现
+- jsp规范中定义了一些标准的action元素，这些元素的标签名都是以jsp为前缀，并且全部采用小写，例如，<jsp:include>,<jsp:forward>等等 
+- <jsp:include>标签
+  - 用于把另外一个资源的输出内容插入进当前的jsp页面的输出内容当中，是一种动态引入的方法
+  - 使用这种方式跟前面的include指令的最大区别是：include指令生成的是一个servlet类，而jsp标签方式生成的有两个servlet类
+- <jsp:forward>标签
+  - 请求转发，跟使用request的getRequestDispatcher(String path)的方式差不多
+  - 它们之间有一个区别就是，使用jsp标签可以使用<jsp:param>子标签向目标页面传递参数值，在目标页面中可以使用getParameter(String paramName）方法获取参数值
+  - 以下的代码是等价的  
+    ```<jsp:forward page="/b.jsp"></jsp:forward> ```  
+    ```<% request.getRequestDispatcher("/b.jsp");%>```
+    
 ***
 
 ### 请求与重定向
