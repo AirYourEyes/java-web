@@ -85,5 +85,20 @@
 		``` 
     - 并不是关闭了浏览器就销毁了HttpSession对象
 
+- 利用URL重写实现Session跟踪
+    - servlet规范中引入了一种补充会话管理机制，它允许不支持Cookie的浏览器也可以与WEB服务器保持连续的会话，这种补充机制要求在响应信息的实体内容中必须包含下一次请求的超链接，并将会话标志号作为超链接的URL的一个特殊的参数
+    - 将会话标志号以参数形式附加到超链接的URL地址后面的技术叫做URL重写。如果在浏览器不支持Cookie或者关闭了Cookie功能的情况下，WEB服务器还要能够与浏览器实现有状态的会话，就必须对所有可能被客户端访问的请求路径（包括超链接，form表单的action属性设置和重定向的URL）进行URL重写
+    - HttpServletResponse接口中定义了两个用于URL重写方法
+        - encodeURL方法
+        - encodeRedirectURL方法
+- HttpSession中的常见方法
+    - setAttribute方法
+    - getAttribute方法
+    - getId方法
+    - isNew方法
+    - getMaxIncttiveInterval方法
+    - getLastAccessedTime方法
+
+
 
 
